@@ -55,7 +55,7 @@ public class server implements Runnable {
                 outputStream.flush();
                 inputStream = new ObjectInputStream(connection.getInputStream());
                 try {
-                    masInp =(float[]) inputStream.readObject();
+                    masInp = (float[]) inputStream.readObject();
                     System.out.println( "You send:");
                     System.out.println("Command"+masInp[0]);
                     System.out.println("X:"+masInp[1]);
