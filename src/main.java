@@ -37,6 +37,7 @@ public class main  extends JFrame {
             public void actionPerformed(ActionEvent e) {
             if(e.getSource()==start)
             {
+                server.setRunning(true);
                  server = new  server();
                 thread =  new Thread(server);
                 thread.start();
