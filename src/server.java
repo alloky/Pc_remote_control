@@ -93,12 +93,13 @@ public class server implements Runnable {
                 System.out.println("X:" + masInp[1]);
                 System.out.println("Y:"+masInp[2]);
                 if (masInp[0]==(float)2.0) {
-                    // curAndX = masInp[1];
-                    curmX = curmX + masInp[1] - curAndX;
-                    curAndY = masInp[2];
-                    curmY = curAndY + masInp[2] - curAndY;
 
+                    curmX = curmX + masInp[1] - curAndX;
+                    curAndX = masInp[1];
+                    curmY = curAndY + masInp[2] - curAndY;
+                    curAndY = masInp[2];
                     robot.mouseMove((int)curmX,(int)curmY);
+                    p = MouseInfo.getPointerInfo().getLocation();
 
                 }
                 if (masInp[0]==(float)1.0){
@@ -135,9 +136,9 @@ public class server implements Runnable {
             System.out.println("--");
             outputStream.flush();
             }
-            catch (SocketException e){e.printStackTrace();
+            catch (SocketException e){e.printStackTrace(); isListening =false; isConnecting= true;setUpConnection();
             } catch (IOException e){e.printStackTrace();} catch (ClassNotFoundException e) {
-                e.printStackTrace();
+                e.printStackTrace(); isListening =false; isConnecting= true;setUpConnection();
             }
             ;
 
