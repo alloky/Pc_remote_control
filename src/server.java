@@ -39,14 +39,9 @@ public class server implements Runnable {
                 serverSocket = new ServerSocket(1234, 10);
                 System.out.println(serverSocket.getLocalSocketAddress());
                 isConnecting = true;
-                if (setUpConnection()) {
-                    isListening = true;
-                    listen();
-                }
-                if (isRunning == false) {
-                    System.out.println("closed");
-
-                }
+                setUpConnection();
+                System.out.println("acepted ");
+                listen();
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (AWTException e) {
@@ -67,7 +62,7 @@ public class server implements Runnable {
     public void setRunning(boolean inp){
         this.isRunning = inp;
     }
-    private   boolean  setUpConnection(){
+    private  void  setUpConnection(){
         while (isConnecting){
             try {
                 connection = serverSocket.accept();
@@ -76,34 +71,33 @@ public class server implements Runnable {
                 outputStream.flush();
                 inputStream = new ObjectInputStream(connection.getInputStream());
                 isConnecting = false;
+                isListening = true;
             }
             catch (IOException e){
                 System.out.println("trying");
             }
         }
-        return true;
     }
     private void listen() throws IOException {
         while (isRunning && isListening )
-        {
-            System.out.println("acepted ");
+        { try {
             Point p = MouseInfo.getPointerInfo().getLocation();
             curmX = (float) p.getX();
             System.out.println("x :--------"+curmX+"--------");
             curmY = (float) p.getY();
             System.out.println("y :--------"+curmY+"--------");
-            try {
+
                 masInp = (float[]) inputStream.readObject();
                 System.out.println( "You send:");
                 System.out.println("Command"+masInp[0]);
-                System.out.println("X:"+masInp[1]);
+                System.out.println("X:" + masInp[1]);
                 System.out.println("Y:"+masInp[2]);
                 if (masInp[0]==(float)2.0) {
-                    //
+                    // curAndX = masInp[1];
                     curmX = curmX + masInp[1] - curAndX;
-                    curAndX = masInp[1];
-                    curmY = curAndY + masInp[2] - curAndY;
                     curAndY = masInp[2];
+                    curmY = curAndY + masInp[2] - curAndY;
+
                     robot.mouseMove((int)curmX,(int)curmY);
 
                 }
@@ -138,14 +132,15 @@ public class server implements Runnable {
                     robot.delay(300);
                     robot.mouseRelease(InputEvent.BUTTON3_MASK);
                 }
+            System.out.println("--");
+            outputStream.flush();
             }
-            catch (SocketException e){
-            } catch (IOException e){} catch (ClassNotFoundException e) {
+            catch (SocketException e){e.printStackTrace();
+            } catch (IOException e){e.printStackTrace();} catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
             ;
-            System.out.println("--");
-            outputStream.flush();
+
                 /*x_str =(String) inputStream.readObject();
                 x = Integer.parseInt(x_str);
                 robot.mouseMove(x,100);*/
